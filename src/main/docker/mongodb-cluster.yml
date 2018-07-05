@@ -1,0 +1,16 @@
+version: '2'
+services:
+    microsergatewaydemo1-mongodb:
+        image: mongo:3.6.3
+        ports:
+            - "27017:27017"
+        command: mongos --configdb microsergatewaydemo1-mongodb-config
+    microsergatewaydemo1-mongodb-node:
+        build:
+            context: .
+            dockerfile: mongodb/MongoDB.Dockerfile
+        command: mongod --replSet rs1 --noprealloc --smallfiles
+    microsergatewaydemo1-mongodb-config:
+        image: mongo:3.6.3
+        container_name: microsergatewaydemo1-mongodb-config
+        command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
